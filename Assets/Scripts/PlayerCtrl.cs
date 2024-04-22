@@ -23,6 +23,7 @@ public class PlayerCtrl : MonoBehaviour
     InputAction Def;
     InputAction Taunting;
     InputAction WrapMove;
+    InputAction Skill1;
 
     Vector2 turn;
     int attackStage;
@@ -33,7 +34,6 @@ public class PlayerCtrl : MonoBehaviour
 
     bool canMove;
     public int atk =10;
-    public float comboWait;
     public int id;
     public float atkCD;
     public float jumpHeight = 10.0f;
@@ -62,9 +62,13 @@ public class PlayerCtrl : MonoBehaviour
 
     bool notTalking = true;
 
+    //slash effect
     public GameObject slashObj1;
     public GameObject slashObj2;
+    //buff effect
+    public GameObject HealEffect;
 
+    public SkillCtrl SkillCtrl;
     CharacterController characterController;
     private void Awake()
     {
@@ -89,13 +93,13 @@ public class PlayerCtrl : MonoBehaviour
         Def = input.actions["Defense"];
         Taunting = input.actions["Taunting"];
         WrapMove = input.actions["Wrap"];
+        Skill1 = input.actions["Skill1"];
         m_Animator = GetComponent<Animator>();
 
         canMove = true;
         isDefing = false;
         canBlock = false;
 
-        comboWait = 0.4f;
         id = 1;
         atkCD = 0.4f;
         SwordCollider = GetComponentInChildren<BoxCollider>();
@@ -313,6 +317,27 @@ public class PlayerCtrl : MonoBehaviour
         characterController.enabled = true;
     }
 
+    void OnExitGame()
+    {
+        Application.Quit();
+        Debug.Log("exit");
+    }
+
+    void OnSkill1()
+    {
+        if (SkillCtrl.skill1canUse)
+        {
+            SkillCtrl.useSkill1();
+            StartCoroutine(Heal());
+            if (hp >= Maxhp - 20)
+            {
+                hp = Maxhp;
+            }
+            else hp += 20;
+        }
+    }
+
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         
@@ -336,6 +361,13 @@ public class PlayerCtrl : MonoBehaviour
         slashObj2.SetActive(true);
         yield return new WaitForSeconds(0.4f);
         slashObj2.SetActive(false);
+    }
+
+    IEnumerator Heal()
+    {
+        HealEffect.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        HealEffect.SetActive(false);
     }
 
 }
