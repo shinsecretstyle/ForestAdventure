@@ -129,8 +129,8 @@ public class PlayerCtrl : MonoBehaviour
         var velocity = new Vector3(horizontal, 0, vertical).normalized;
         var speed = run.IsPressed() ? 2 : 1;
         var rotationSpeed = 600 * Time.deltaTime;
-
-        m_Animator.SetFloat("Speed", velocity.magnitude * speed, 0.1f, Time.deltaTime);
+        
+        m_Animator.SetFloat("Speed", velocity.magnitude * speed * m.y, 0.1f, Time.deltaTime);
 
         Movement();
 
@@ -143,10 +143,10 @@ public class PlayerCtrl : MonoBehaviour
         }
 
         //isTaunting = m_Animator.GetBool("Taunting");
-
+        
+        //test for blink skill
         if(isTaunting && IsAnimFinished("Taunting"))
         {
-            Debug.Log("123");
             isTaunting= false;
             canMove = true;
         }
@@ -162,7 +162,6 @@ public class PlayerCtrl : MonoBehaviour
         }
 
 
-
         if(WrapMove.triggered)
         {
             Debug.Log("Wrap is Pressed");
@@ -175,16 +174,13 @@ public class PlayerCtrl : MonoBehaviour
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
         Vector2 moveInput = move.ReadValue<Vector2>();
-
         
         Vector3 moveDirection = cameraForward * moveInput.y + cameraRight * moveInput.x;
         moveDirection.y -= Physics.gravity.magnitude * Time.deltaTime *30;
         moveDirection.Normalize();
-
         
         float speed = Speed;
         
-
         Vector3 newPosition = transform.position;
         if (run.IsPressed())
         {
@@ -192,6 +188,11 @@ public class PlayerCtrl : MonoBehaviour
         }
         else speed = Speed;
 
+        if(moveInput.y < 0)
+        {
+            speed *= -1;
+            moveDirection *= -1;
+        }
         //if(jump.IsPressed() && jumpCD <=0)
         //{
         //    moveDirection.y = Mathf.Sqrt(100 * Physics.gravity.magnitude * jumpHeight);
@@ -200,6 +201,7 @@ public class PlayerCtrl : MonoBehaviour
 
         //    moveDirection.y *= 0.5f;
         //}
+
         if (canMove)
         {
             characterController.Move(moveDirection * speed * Time.deltaTime);
@@ -208,8 +210,6 @@ public class PlayerCtrl : MonoBehaviour
         turn.x += Mouse.current.delta.x.ReadValue() * Time.deltaTime * 80;
         turn.y += Mouse.current.delta.y.ReadValue();
         transform.localRotation = Quaternion.Euler(0, turn.x, 0);
-        
-
         
     }
 
@@ -323,6 +323,7 @@ public class PlayerCtrl : MonoBehaviour
         Debug.Log("exit");
     }
 
+    //healing skill
     void OnSkill1()
     {
         if (SkillCtrl.skill1canUse)
@@ -336,7 +337,6 @@ public class PlayerCtrl : MonoBehaviour
             else hp += 20;
         }
     }
-
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {

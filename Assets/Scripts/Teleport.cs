@@ -7,6 +7,9 @@ public class Teleport : MonoBehaviour
     public Text teleportText;
     public Camera playerCamera;
 
+    string s1 = "Press E to Teleport";
+    string s2 = "Press E to Restart";
+    string s3;
     private void Start()
     {
         playerCamera = Camera.main;
@@ -35,11 +38,12 @@ public class Teleport : MonoBehaviour
         if (teleportText.gameObject.activeSelf && SceneManager.GetActiveScene().name == "WorldMap")
         {
             Vector3 targetPosition = playerCamera.transform.position;
-            targetPosition.y = teleportText.transform.position.y+10;
+            targetPosition.y = teleportText.transform.position.y + 10;
             teleportText.transform.LookAt(targetPosition, Vector3.up);
         }
         else if(teleportText.gameObject.activeSelf && SceneManager.GetActiveScene().name == "BossStage")
         {
+
             Vector3 targetPosition = playerCamera.transform.position;
             
             targetPosition.y = teleportText.transform.position.y + 10;
@@ -51,7 +55,12 @@ public class Teleport : MonoBehaviour
 
     private void ShowTeleportText(bool show)
     {
+        if (SceneManager.GetActiveScene().name == "WorldMap")
+        {
+            s3 = s1;
+        }
+        else s3 = s2;
         teleportText.gameObject.SetActive(show);
-        teleportText.text = show ? "Press E to Teleport" : "";
+        teleportText.text = show ? s3 : "";
     }
 }

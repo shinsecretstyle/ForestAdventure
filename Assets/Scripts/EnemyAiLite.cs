@@ -19,7 +19,7 @@ public class EnemyAiLite : MonoBehaviour
     private Vector3 patrolPoint;
     private bool isPatrolling;
     private float patrolTimer;
-    public bool canLimit = true;
+    bool canLimit = false;
     private float attackRange = 5f;
 
     bool canATK;
@@ -39,6 +39,8 @@ public class EnemyAiLite : MonoBehaviour
     public GameObject FallenItem;
     public GameObject slashObj;
     public GameObject limitObj;
+
+    public GameObject Fires;
     //private EnemyWeapon weapon;
     // Start is called before the first frame update
     void Start()
@@ -53,8 +55,6 @@ public class EnemyAiLite : MonoBehaviour
         isPatrolling = false;
         patrolTimer = patrolWaitTime;
 
-        //SetRandomPatrolPoint();
-
         if (Target == null || navMeshAgent == null)
         {
             Debug.Log("Target or NavMeshAgent not set!");
@@ -66,14 +66,19 @@ public class EnemyAiLite : MonoBehaviour
 
 
         isDie = false;
+
+        StartCoroutine(makeFires());
+        StartCoroutine(resetCD(4f));
+
     }
 
     // Update is called once per frame
     void Update()
     {
         HpSlider.value = Hp;
-
-
+        
+        
+        
         ChasePlayer();
 
         if (Hp <= 0)
@@ -81,10 +86,12 @@ public class EnemyAiLite : MonoBehaviour
 
             animator.SetBool("Die", true);
             dieTime -= Time.deltaTime;
-            if (dieTime < 0)
+            if (dieTime < 0 && !isDie)
             {
-                Instantiate(FallenItem);
-                Destroy(gameObject);
+                isDie = true;
+                //Fires.SetActive(false);
+                StartCoroutine(removeFires());
+                
             }
 
         }
@@ -101,7 +108,7 @@ public class EnemyAiLite : MonoBehaviour
 
     }
 
-
+    //not us in this stage
     bool CanSeePlayer()
     {
         if (Vector3.Distance(transform.position, Target.position) < detectionRange)
@@ -117,9 +124,7 @@ public class EnemyAiLite : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("Player"))
                     {
-
                         return true;
-
                     }
                 }
             }
@@ -140,7 +145,6 @@ public class EnemyAiLite : MonoBehaviour
             canLimit = false;
             animator.SetTrigger("Limit");
             StartCoroutine(resetCD(3f));
-
         }
         else if (distanceToPlayer > attackRange)
         {
@@ -232,11 +236,7 @@ public class EnemyAiLite : MonoBehaviour
         
     }
 
-    //public void Slash()
-    //{
-    //    Instantiate(slashObj, slashPoz.position, Quaternion.identity);
-    //}
-
+    //slash effect
     IEnumerator Slash()
     {
         slashObj.SetActive(true);
@@ -244,6 +244,7 @@ public class EnemyAiLite : MonoBehaviour
         slashObj.SetActive(false);
     }
 
+    //attack when far from player
     public void Limit()
     {
         Instantiate(limitObj,Target.transform.position, Quaternion.identity);
@@ -253,5 +254,20 @@ public class EnemyAiLite : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         canLimit = true;
+    }
+
+    //make the env fire
+    IEnumerator makeFires()
+    {
+        yield return new WaitForSeconds(2f);
+        Fires.SetActive(true);
+    }
+
+    IEnumerator removeFires()
+    {
+        Instantiate(FallenItem);
+        yield return new WaitForSeconds(1.5f);
+        Fires.SetActive(false);
+        Destroy(gameObject);
     }
 }
