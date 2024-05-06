@@ -20243,18 +20243,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pplayer
       objectReference: {fileID: 0}
-    - target: {fileID: 2776856471285934414, guid: d0ef28ca0c3dd4b4db84dfbd810fe545, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3491934284371647405, guid: d0ef28ca0c3dd4b4db84dfbd810fe545, type: 3}
-      propertyPath: m_Center.y
-      value: 1.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3651399493884849475, guid: d0ef28ca0c3dd4b4db84dfbd810fe545, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5517513007223318397, guid: d0ef28ca0c3dd4b4db84dfbd810fe545, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.2

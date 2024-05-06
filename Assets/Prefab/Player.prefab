@@ -507,7 +507,7 @@ GameObject:
   - component: {fileID: 3491934284371647405}
   - component: {fileID: 2862985533861305059}
   m_Layer: 0
-  m_Name: Pplayer
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -574,6 +574,7 @@ MonoBehaviour:
   Speed: 0
   RunSpeed: 0
   hp: 0
+  maxHP: 0
   HPslider: {fileID: 0}
   isAttacking: 0
   atk: 0
@@ -620,7 +621,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 1.3, z: 0}
+  m_Center: {x: 0, y: 1.4, z: 0}
 --- !u!114 &2862985533861305059
 MonoBehaviour:
   m_ObjectHideFlags: 0

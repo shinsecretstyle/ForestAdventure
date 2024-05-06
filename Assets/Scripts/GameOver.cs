@@ -11,6 +11,7 @@ public class GameOver : MonoBehaviour
     }
     public void Restart()
     {
+        PlayerPrefs.SetInt("PlayerHP", 120);
         SceneManager.LoadScene("WorldMap");
     }
 

@@ -11,7 +11,9 @@ public class Title : MonoBehaviour
     }
     public void StartGame()
     {
+        PlayerPrefs.SetInt("PlayerHP", 120);
         SceneManager.LoadScene("WorldMap");
+
     }
 
     public void Quit()

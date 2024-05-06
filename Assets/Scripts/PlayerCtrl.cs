@@ -12,7 +12,7 @@ public class PlayerCtrl : MonoBehaviour
     public float RunSpeed;
 
     public int hp;
-    private int Maxhp;
+    public int maxHP;
     public Slider HPslider;
     InputAction move;
     InputAction jump;
@@ -33,7 +33,7 @@ public class PlayerCtrl : MonoBehaviour
     bool isAttack2;
 
     bool canMove;
-    public int atk =10;
+    public int atk = 10;
     public int id;
     public float atkCD;
     public float jumpHeight = 10.0f;
@@ -72,9 +72,14 @@ public class PlayerCtrl : MonoBehaviour
     CharacterController characterController;
     private void Awake()
     {
-        hp = 120;
-        Maxhp = hp;
-        HPslider.maxValue = Maxhp;
+        maxHP = 120;
+        if (PlayerPrefs.HasKey("PlayerHP"))
+        {
+            hp = PlayerPrefs.GetInt("PlayerHP");
+            Debug.Log("load hp " + hp + " success");
+        }else hp = maxHP;
+
+        HPslider.maxValue = maxHP;
         HPslider.value = hp;
 
         isAttacking = false;
@@ -295,10 +300,14 @@ public class PlayerCtrl : MonoBehaviour
         
         if (canTeleport && SceneManager.GetActiveScene().name == "WorldMap")
         {
+            PlayerPrefs.SetInt("PlayerHP", hp);
+            PlayerPrefs.Save();
             SceneManager.LoadScene("BossStage");
         }
         else if (canTeleport && SceneManager.GetActiveScene().name == "BossStage")
         {
+            PlayerPrefs.SetInt("PlayerHP", hp);
+            PlayerPrefs.Save();
             SceneManager.LoadScene("WorldMap");
         }
     }
@@ -330,9 +339,9 @@ public class PlayerCtrl : MonoBehaviour
         {
             SkillCtrl.useSkill1();
             StartCoroutine(Heal());
-            if (hp >= Maxhp - 20)
+            if (hp >= maxHP - 20)
             {
-                hp = Maxhp;
+                hp = maxHP;
             }
             else hp += 20;
         }
